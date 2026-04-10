@@ -1,3 +1,3 @@
 # .github Repository
 
-This repository contains GitHub-specific configuration files for the **Linke Genealogical Engineering** organization.
+This repository contains common configuration and workflow files for the **Linke Genealogical Engineering** organization.
