@@ -2,8 +2,8 @@
 # GitHub Actions Reusable Workflow: Publish to NuGet
 #
 # Purpose:
-#   This workflow builds, tests, and publishes the Calendrier Républicain .NET library to NuGet 
-#   when a new release is published in the main branch.
+#   This workflow builds, tests, and publishes a .NET library to NuGet when a new release is 
+#   published in the main branch.
 #
 # Inputs:
 #   - release_tag: The release tag (e.g., v1.2.3) to determine the version number for the NuGet
@@ -35,10 +35,19 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-
     steps:
+      - name: Extract version from release tag
+        run: |
+          VERSION=$(echo "${{ inputs.release_tag }}" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Validate version
+        run: |
+          if [ -z "${{ env.VERSION }}" ]; then
+            echo "Error: Failed to extract version from release tag. Ensure the tag follows the format v<major>.<minor>.<patch>."
+            exit 1
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -55,19 +64,6 @@ jobs:
 
       - name: Run tests
         run: dotnet test --configuration Release --no-build --verbosity normal
-
-      - name: Extract version from release tag
-        id: get_version
-        run: |
-          VERSION=$(echo "${{ inputs.release_tag }}" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Validate version
-        run: |
-          if [ -z "${{ env.VERSION }}" ]; then
-            echo "Error: Failed to extract version from release tag. Ensure the tag follows the format v<major>.<minor>.<patch>."
-            exit 1
-          fi
 
       - name: Pack
         run: dotnet pack --configuration Release --no-restore --output ./nupkg /p:Version=${{ env.VERSION }}
