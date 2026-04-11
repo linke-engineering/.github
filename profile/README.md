@@ -11,8 +11,9 @@ To learn more about what we are currently building and how we approach software 
 
 ## Contact Us
 
-- **Website**: [linke.engineering](https://www.linke.engineering/)
+- **Website**: [www.linke.engineering](https://www.linke.engineering/)
 - **Email**: [info@linke.engineering](mailto:info@linke.engineering)
 - **GitHub**: [github.com/linke-engineering](https://github.com/linke-engineering)
+- **NuGet**: [nuget.org/profiles/linke-engineering](https://www.nuget.org/profiles/linke-engineering)
 
 Thank you for your interest in Linke Genealogical Engineering!
