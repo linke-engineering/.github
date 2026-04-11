@@ -1,4 +1,4 @@
-# -------------------------------------------------------------------------------------------------
+﻿# -------------------------------------------------------------------------------------------------
 # GitHub Actions Reusable Workflow: Continuous Integration (CI) for .NET Projects
 #
 # Purpose:
@@ -35,6 +35,9 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
+
+      - name: Set encoding to UTF-8
+        run: export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
