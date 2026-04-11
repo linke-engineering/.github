@@ -38,7 +38,7 @@ jobs:
       dotnet_version: ${{ inputs.dotnet_version }}
 
   publish:
-    needs: ci
+    needs: ci-invoke
     runs-on: ubuntu-latest
 
     steps:
