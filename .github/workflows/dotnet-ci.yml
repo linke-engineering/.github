@@ -1,0 +1,43 @@
+# -------------------------------------------------------------------------------------------------
+# GitHub Actions Reusable Workflow: Continuous Integration (CI) for .NET Projects
+#
+# Purpose:
+#   This workflow checks out the repository, sets up the .NET SDK, restores dependencies, builds,
+#   and runs tests for a .NET project.
+#
+# Inputs:
+#   - dotnet_version: The version of the .NET SDK to use for building and testing.
+# -------------------------------------------------------------------------------------------------
+
+name: Continuous Integration for .NET Projects
+
+on:
+  workflow_call:
+    inputs:
+      dotnet_version:
+        description: '.NET SDK version to use'
+        required: false
+        type: string
+        default: '10.0.x'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ inputs.dotnet_version }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test --configuration Release --no-build --verbosity normal

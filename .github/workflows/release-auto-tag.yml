@@ -25,7 +25,7 @@ on:
         type: string
 
 jobs:
-  auto-tag:
+  tag:
     runs-on: ubuntu-latest
 
     permissions:

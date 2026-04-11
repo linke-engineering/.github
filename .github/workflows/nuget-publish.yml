@@ -11,7 +11,7 @@
 #   - dotnet_version: The version of the .NET SDK to use for building and testing.
 #
 # Prerequisites:
-#   - The repository must contain a valid .NET project.
+#   - The invoking repository must contain a valid .NET project.
 #   - The NuGet API key must be stored in the repository secrets as NUGET_API_KEY.
 #   - The release tag must follow the format: v<major>.<minor>.<patch> (e.g., v1.2.3).
 # -------------------------------------------------------------------------------------------------
@@ -32,7 +32,13 @@ on:
         default: '10.0.x'
 
 jobs:
+  ci-invoke:
+    uses: ./.github/workflows/dotnet-ci.yml
+    with:
+      dotnet_version: ${{ inputs.dotnet_version }}
+
   publish:
+    needs: ci
     runs-on: ubuntu-latest
 
     steps:
@@ -47,23 +53,6 @@ jobs:
             echo "Error: Failed to extract version from release tag. Ensure the tag follows the format v<major>.<minor>.<patch>."
             exit 1
           fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: ${{ inputs.dotnet_version }}
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Run tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
 
       - name: Pack
         run: dotnet pack --configuration Release --no-restore --output ./nupkg /p:Version=${{ env.VERSION }}
