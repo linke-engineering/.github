@@ -33,7 +33,7 @@ on:
     secrets:
       NUGET_API_KEY:
         description: 'NuGet API key for publishing packages'
-        required: true
+        required: false
 
 jobs:
   ci-invoke:
