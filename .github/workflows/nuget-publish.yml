@@ -1,4 +1,4 @@
-# -------------------------------------------------------------------------------------------------
+﻿# -------------------------------------------------------------------------------------------------
 # GitHub Actions Reusable Workflow: Publish to NuGet
 #
 # Purpose:
@@ -42,6 +42,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Extract version from release tag
         run: |
           VERSION=$(echo "${{ inputs.release_tag }}" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
@@ -55,7 +58,7 @@ jobs:
           fi
 
       - name: Pack
-        run: dotnet pack --configuration Release --no-restore --output ./nupkg /p:Version=${{ env.VERSION }}
+        run: dotnet pack --configuration Release --output ./nupkg /p:Version=${{ env.VERSION }}
 
       - name: Publish to NuGet
         run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
